@@ -7,7 +7,7 @@ REPO_REF="${REPO_REF:-main}"
 PLUGIN_NAME="claude-code"
 MARKETPLACE_DIR="${HOME}/.agents/plugins"
 MARKETPLACE_PATH="${MARKETPLACE_DIR}/marketplace.json"
-PLUGIN_PARENT_DIR="${HOME}/plugins"
+PLUGIN_PARENT_DIR="${HOME}/.codex/plugins"
 PLUGIN_DEST_DIR="${PLUGIN_PARENT_DIR}/${PLUGIN_NAME}"
 
 usage() {
@@ -156,6 +156,12 @@ main() {
   mkdir -p "${PLUGIN_PARENT_DIR}"
   copy_tree "${source_root}/plugins/${PLUGIN_NAME}" "${PLUGIN_DEST_DIR}"
 
+  # Migrate the old undocumented install location if it exists.
+  if [[ -d "${HOME}/plugins/${PLUGIN_NAME}" && "${HOME}/plugins/${PLUGIN_NAME}" != "${PLUGIN_DEST_DIR}" ]]; then
+    warn "An older install was found at ${HOME}/plugins/${PLUGIN_NAME}."
+    warn "Codex docs expect personal plugins under ${HOME}/.codex/plugins."
+  fi
+
   log "Updating ${MARKETPLACE_PATH}"
   write_marketplace
 
@@ -176,8 +182,10 @@ Marketplace:
 
 Next steps:
   1. Restart Codex if it is already running.
-  2. Ask Codex: "Use Claude Code to review this change."
-  3. If needed, install Claude Code CLI:
+  2. Open the Plugin Directory in Codex and install "Claude Code" from your local marketplace.
+  3. Start a new thread.
+  4. Ask Codex: "Use Claude Code to review this change."
+  5. If needed, install Claude Code CLI:
      curl -fsSL https://claude.ai/install.sh | bash
 EOF
 }

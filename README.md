@@ -53,11 +53,13 @@ curl -fsSL https://raw.githubusercontent.com/hiroshi75/cc-codex/main/bootstrap.s
 
 This installs:
 
-- the plugin into `~/plugins/claude-code`
+- the plugin into `~/.codex/plugins/claude-code`
 - a marketplace entry into `~/.agents/plugins/marketplace.json`
 - a reminder to install Claude Code CLI if `claude` is not available
 
 `install.sh` is the real installer. `bootstrap.sh` is a thin entrypoint that avoids stale GitHub raw caching issues on `install.sh`.
+
+After the files are placed locally, open the Plugin Directory in Codex, install the plugin from your local marketplace, then start a new thread before trying to use it.
 
 ## Direct Script Usage
 
