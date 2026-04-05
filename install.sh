@@ -36,7 +36,7 @@ need_cmd() {
 }
 
 log() {
-  printf '[install] %s\n' "$1"
+  printf '[install] %s\n' "$1" >&2
 }
 
 warn() {
@@ -69,10 +69,12 @@ fetch_repo_snapshot() {
 
 resolve_source_root() {
   local script_dir
-  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  if [[ -f "${script_dir}/plugins/${PLUGIN_NAME}/.codex-plugin/plugin.json" ]]; then
-    printf '%s\n' "${script_dir}"
-    return
+  if [[ "${BASH_SOURCE[0]-}" != "" ]]; then
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]-}")" && pwd)"
+    if [[ -f "${script_dir}/plugins/${PLUGIN_NAME}/.codex-plugin/plugin.json" ]]; then
+      printf '%s\n' "${script_dir}"
+      return
+    fi
   fi
   fetch_repo_snapshot
 }
