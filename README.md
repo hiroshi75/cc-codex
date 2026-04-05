@@ -1,67 +1,67 @@
 # Claude Code Plugin For Codex
 
-`openai/codex-plugin-cc` の逆方向版です。Codex からローカルの Claude Code CLI を呼び出し、レビューや調査、実装タスクを Claude に委譲できます。
+The reverse of `openai/codex-plugin-cc`: this project lets Codex call a local Claude Code CLI for reviews, investigations, and delegated implementation work.
 
-このリポジトリは Codex 向けの再配布可能なプラグイン構成を含みます。Anthropic のコード本体は同梱せず、ローカルにインストール済みの `claude` CLI だけを呼び出します。
+This repository is packaged as a redistributable Codex plugin. It does not bundle Anthropic code. It only invokes a locally installed `claude` CLI.
 
 ## Contents
 
 - `.agents/plugins/marketplace.json`
-  Codex 用 marketplace manifest
+  Marketplace manifest for Codex
 - `plugins/claude-code/.codex-plugin/plugin.json`
-  プラグイン manifest
+  Plugin manifest
 - `plugins/claude-code/skills/claude-code/SKILL.md`
-  Codex が「Claude を使って」と依頼されたときに使うスキル
+  Skill used when the user asks Codex to involve Claude Code
 - `plugins/claude-code/scripts/claude-code-bridge.sh`
-  ローカルの Claude Code CLI を呼ぶ薄いラッパー
+  Thin wrapper around the local Claude Code CLI
+- `install.sh`
+  Main installer
+- `bootstrap.sh`
+  Stable bootstrap entrypoint for `curl | bash`
 
 ## What It Does
 
-- Codex から Claude Code にレビューを依頼する
-- Codex から Claude Code に実装や調査タスクを委譲する
-- 同じワークスペース上で Claude の結果を Codex 側に持ち帰る
+- Ask Claude Code to review the current git state from inside Codex
+- Delegate investigations or implementation tasks from Codex to Claude Code
+- Bring Claude Code output back into the active Codex workflow
 
 ## Requirements
 
-- Claude Code CLI がローカルに入っていること
-- `claude` が `PATH` から実行できること
-- `git` と `bash` が使えること
+- Claude Code CLI installed locally
+- `claude` available on `PATH`
+- `git`, `bash`, `curl`, `tar`, and `python3`
 
-## Quick Install
-
-Plugin Directory への自己公開がまだ無いため、現状はローカル配置が必要です。この repo には利用者向けのインストーラを同梱しています。
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/hiroshi75/cc-codex/main/bootstrap.sh | bash
-```
-
-このスクリプトは以下を自動で行います。
-
-- `~/plugins/claude-code` に plugin を配置
-- `~/.agents/plugins/marketplace.json` を作成または更新
-- Claude Code CLI 未導入時は次の案内を表示
-
-`install.sh` は実インストーラ本体です。`bootstrap.sh` は GitHub raw のキャッシュ影響を避けるための薄い起動用スクリプトです。
+Install Claude Code with one of:
 
 ```bash
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
-Claude Code のインストール例:
-
-```bash
-curl -fsSL https://claude.ai/install.sh | bash
-```
-
-または:
+or:
 
 ```bash
 brew install --cask claude-code
 ```
 
+## Quick Install
+
+Because self-serve publishing to the official Plugin Directory is not available yet, installation currently requires local file placement. This repository includes an installer to make that manageable.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hiroshi75/cc-codex/main/bootstrap.sh | bash
+```
+
+This installs:
+
+- the plugin into `~/plugins/claude-code`
+- a marketplace entry into `~/.agents/plugins/marketplace.json`
+- a reminder to install Claude Code CLI if `claude` is not available
+
+`install.sh` is the real installer. `bootstrap.sh` is a thin entrypoint that avoids stale GitHub raw caching issues on `install.sh`.
+
 ## Direct Script Usage
 
-CLI 単体でも以下のように使えます。
+You can also use the wrapper directly:
 
 ```bash
 plugins/claude-code/scripts/claude-code-bridge.sh check
@@ -72,16 +72,16 @@ plugins/claude-code/scripts/claude-code-bridge.sh delegate --task "Investigate w
 
 ## Configuration
 
-環境変数で挙動を上書きできます。
+Behavior can be overridden with environment variables:
 
 - `CLAUDE_CODE_BIN`
-  `claude` 以外の実行パスを使う
+  Override the `claude` executable path
 - `CLAUDE_CODE_MODEL`
-  デフォルトモデルを指定する
+  Set the default Claude model
 - `CLAUDE_CODE_EXTRA_ARGS`
-  毎回追加したい Claude CLI フラグを指定する
+  Append extra flags to every Claude CLI invocation
 
-例:
+Example:
 
 ```bash
 export CLAUDE_CODE_MODEL=claude-sonnet-4-5
@@ -90,9 +90,9 @@ export CLAUDE_CODE_EXTRA_ARGS="--output-format stream-json"
 
 ## Design Notes
 
-- レビュー時は wrapper が git 状況を添えて Claude に依頼します
-- 実装委譲時は現在のワークスペースで Claude を実行します
-- 書き込み権限や詳細な Claude CLI ポリシーはユーザー側の Claude 設定に委ねます
+- For review mode, the wrapper summarizes git state and asks Claude for findings
+- For delegate mode, the wrapper runs Claude in the current workspace
+- Write permissions and Claude-side safety policy remain controlled by the user's Claude Code setup
 
 ## License
 
