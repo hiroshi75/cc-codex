@@ -1,0 +1,34 @@
+{
+  "name": "claude-code",
+  "version": "0.1.0",
+  "description": "Use Claude Code from Codex for second opinions, reviews, and delegated implementation tasks.",
+  "author": {
+    "name": "Codex"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "claude-code",
+    "bridge",
+    "review",
+    "delegation"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Claude Code",
+    "shortDescription": "Call a local Claude Code CLI from Codex.",
+    "longDescription": "Lets Codex hand a review, investigation, or implementation task to a locally installed Claude Code CLI, then bring the result back into the current Codex session.",
+    "developerName": "Codex",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Claude Code to review my working tree.",
+      "Delegate this investigation to Claude Code.",
+      "Ask Claude Code for a second opinion on this patch."
+    ],
+    "brandColor": "#D97706"
+  }
+}
