@@ -27,6 +27,24 @@
 - `claude` が `PATH` から実行できること
 - `git` と `bash` が使えること
 
+## Quick Install
+
+Plugin Directory への自己公開がまだ無いため、現状はローカル配置が必要です。この repo には利用者向けのインストーラを同梱しています。
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hiroshi75/cc-codex/main/install.sh | bash
+```
+
+このスクリプトは以下を自動で行います。
+
+- `~/plugins/claude-code` に plugin を配置
+- `~/.agents/plugins/marketplace.json` を作成または更新
+- Claude Code CLI 未導入時は次の案内を表示
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
 Claude Code のインストール例:
 
 ```bash
