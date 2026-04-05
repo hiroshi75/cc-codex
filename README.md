@@ -48,7 +48,10 @@ brew install --cask claude-code
 Because self-serve publishing to the official Plugin Directory is not available yet, installation currently requires local file placement. This repository includes an installer to make that manageable.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hiroshi75/cc-codex/main/bootstrap.sh | bash
+tmpdir="$(mktemp -d)" && \
+curl -fsSL https://github.com/hiroshi75/cc-codex/archive/refs/heads/main.tar.gz -o "$tmpdir/cc-codex.tar.gz" && \
+tar -xzf "$tmpdir/cc-codex.tar.gz" -C "$tmpdir" && \
+bash "$tmpdir/cc-codex-main/install.sh"
 ```
 
 This installs:
@@ -57,7 +60,7 @@ This installs:
 - a marketplace entry into `~/.agents/plugins/marketplace.json`
 - a reminder to install Claude Code CLI if `claude` is not available
 
-`install.sh` is the real installer. `bootstrap.sh` is a thin entrypoint that avoids stale GitHub raw caching issues on `install.sh`.
+`install.sh` is the real installer. The archive-based command above avoids stale GitHub raw caching on branch-based shell scripts.
 
 After the files are placed locally, open the Plugin Directory in Codex, install the plugin from your local marketplace, then start a new thread before trying to use it.
 
