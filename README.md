@@ -32,7 +32,7 @@
 Plugin Directory への自己公開がまだ無いため、現状はローカル配置が必要です。この repo には利用者向けのインストーラを同梱しています。
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hiroshi75/cc-codex/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/hiroshi75/cc-codex/main/bootstrap.sh | bash
 ```
 
 このスクリプトは以下を自動で行います。
@@ -40,6 +40,8 @@ curl -fsSL https://raw.githubusercontent.com/hiroshi75/cc-codex/main/install.sh 
 - `~/plugins/claude-code` に plugin を配置
 - `~/.agents/plugins/marketplace.json` を作成または更新
 - Claude Code CLI 未導入時は次の案内を表示
+
+`install.sh` は実インストーラ本体です。`bootstrap.sh` は GitHub raw のキャッシュ影響を避けるための薄い起動用スクリプトです。
 
 ```bash
 curl -fsSL https://claude.ai/install.sh | bash
